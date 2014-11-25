@@ -37,9 +37,9 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
 @interface HamburgerButton (){
     CGMutablePathRef _shortStroke;
     CGMutablePathRef _outline;
-    
 }
 
+//三条线
 @property (strong, nonatomic) CAShapeLayer *top;
 @property (strong, nonatomic) CAShapeLayer *bottom;
 @property (strong, nonatomic) CAShapeLayer *middle;
@@ -54,23 +54,28 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
     [self setBackgroundColor:[UIColor orangeColor]];
     
     if (self) {
+        
         _shortStroke = CGPathCreateMutable();
         CGPathMoveToPoint(_shortStroke, nil, 2, 2);
         CGPathAddLineToPoint(_shortStroke, nil, 28, 2);
         
         _outline = CGPathCreateMutable();
         CGPathMoveToPoint(_outline, nil, 10, 27);
+        
         CGPathAddCurveToPoint(_outline, nil, 12.00, 27.00, 28.02, 27.00, 40, 27);
+        
         CGPathAddCurveToPoint(_outline, nil, 55.92, 27.00, 50.47,  2.00, 27,  2);
         CGPathAddCurveToPoint(_outline, nil, 13.16,  2.00,  2.00, 13.16,  2, 27);
+        
         CGPathAddCurveToPoint(_outline, nil,  2.00, 40.84, 13.16, 52.00, 27, 52);
         CGPathAddCurveToPoint(_outline, nil, 40.84, 52.00, 52.00, 40.84, 52, 27);
+        
         CGPathAddCurveToPoint(_outline, nil, 52.00, 13.16, 42.39,  2.00, 27,  2);
         CGPathAddCurveToPoint(_outline, nil, 13.16,  2.00,  2.00, 13.16,  2, 27);
         
-        self.top = [[CAShapeLayer alloc]init];
-        self.middle = [[CAShapeLayer alloc]init];
-        self.bottom = [[CAShapeLayer alloc]init];
+        self.top = [[CAShapeLayer alloc] init];
+        self.middle = [[CAShapeLayer alloc] init];
+        self.bottom = [[CAShapeLayer alloc] init];
         
         self.top.path = _shortStroke;
         self.bottom.path = _shortStroke;
@@ -79,6 +84,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
         NSArray *arr = [NSArray arrayWithObjects:self.top,self.middle,self.bottom, nil];
         
         for (CAShapeLayer *layer in arr) {
+            
             layer.fillColor = nil;
             layer.strokeColor = [UIColor whiteColor].CGColor;
             layer.lineWidth = 4;
@@ -109,6 +115,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
 }
 
 - (void)setShowMenu:(BOOL)showMenu{
+    
     _showMenu = showMenu;
     
     CABasicAnimation *strokeStartAnimation = [CABasicAnimation animationWithKeyPath:@"strokeStart"];
@@ -116,13 +123,19 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
     
     //为中间那根条进行的动画,分别对start和end两端的端点进行动画,也就是为start和end两个端点描述其运行的路径，然后分别让其运动
     if (showMenu) {
+        
+        //第一个动画，中间横线到上下两线的交点
         strokeStartAnimation.toValue = [NSNumber numberWithFloat:menuStrokeStart];
-        strokeStartAnimation.duration = .5;
-        strokeStartAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :0.4 :0.5 :1];
+        strokeStartAnimation.duration = 5;
+        //(0,0) ~ (0.25,0.4) ~ (0.5,1) ~ (1,1)
+//        strokeStartAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :0.4 :0.5 :1];
+        strokeStartAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0 :0 :0 : 0];
         
         strokeEndAnimation.toValue = [NSNumber numberWithFloat:menuStrokeEnd];
-        strokeEndAnimation.duration = .6;
-        strokeEndAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :-0.4 :0.5 :1];
+        strokeEndAnimation.duration = 6;
+        //(0,0) ~ (0.25,-0.4) ~ (0.5,1) ~ (1,1)
+//        strokeEndAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :-0.4 :0.5 :1];
+        strokeEndAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0 :0 :0 :0];
     }else{
         strokeStartAnimation.toValue = [NSNumber numberWithFloat:hamburgerStrokeStart];
         strokeStartAnimation.duration = .5;

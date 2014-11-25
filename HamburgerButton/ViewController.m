@@ -25,7 +25,6 @@
     btn.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
     [btn addTarget:self action:@selector(action:) forControlEvents:UIControlEventTouchUpInside];
     
-    
     [self.view addSubview:btn];
 }
 
