@@ -18,7 +18,7 @@
 
 @implementation CALayer (Helper)
 
--(void)lld_applyAnimation:(CABasicAnimation *)animation{
+- (void)lld_applyAnimation:(CABasicAnimation *)animation{
     if (animation.fromValue == nil) {
         animation.fromValue = [[self presentationLayer] valueForKeyPath:animation.keyPath];
     }
@@ -48,8 +48,11 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
 
 @implementation HamburgerButton
 
--(id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame{
+    
     self = [super initWithFrame:frame];
+    [self setBackgroundColor:[UIColor orangeColor]];
+    
     if (self) {
         _shortStroke = CGPathCreateMutable();
         CGPathMoveToPoint(_shortStroke, nil, 2, 2);
@@ -74,6 +77,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
         self.middle.path = _outline;
         
         NSArray *arr = [NSArray arrayWithObjects:self.top,self.middle,self.bottom, nil];
+        
         for (CAShapeLayer *layer in arr) {
             layer.fillColor = nil;
             layer.strokeColor = [UIColor whiteColor].CGColor;
@@ -90,6 +94,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
                               @"tranform":[NSNull null]};
             [self.layer addSublayer:layer];
         }
+        
         self.top.anchorPoint = CGPointMake(28.0 / 30.0, 0.5);   //比例
         self.top.position = CGPointMake(40, 18);
         
@@ -103,7 +108,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
     return self;
 }
 
--(void)setShowMenu:(BOOL)showMenu{
+- (void)setShowMenu:(BOOL)showMenu{
     _showMenu = showMenu;
     
     CABasicAnimation *strokeStartAnimation = [CABasicAnimation animationWithKeyPath:@"strokeStart"];
@@ -138,6 +143,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
     topTransformAnimation.fillMode = kCAFillModeBackwards;
     
     CABasicAnimation *bottomTransformAnimation = [topTransformAnimation copy];
+    
     if (showMenu) {
         CATransform3D translation = CATransform3DMakeTranslation(-4, 0, 0);
         //变换的叠加
@@ -156,7 +162,6 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
     
     [self.top lld_applyAnimation:topTransformAnimation];
     [self.bottom lld_applyAnimation:bottomTransformAnimation];
-    
 }
 
 /*
