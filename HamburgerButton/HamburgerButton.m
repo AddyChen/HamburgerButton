@@ -39,7 +39,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
     CGMutablePathRef _outline;
 }
 
-//三条线
+//三条线,CAShapeLayer三次贝塞尔曲线类
 @property (strong, nonatomic) CAShapeLayer *top;
 @property (strong, nonatomic) CAShapeLayer *bottom;
 @property (strong, nonatomic) CAShapeLayer *middle;
@@ -62,14 +62,13 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
         _outline = CGPathCreateMutable();
         CGPathMoveToPoint(_outline, nil, 10, 27);
         
+        //三次贝塞尔曲线
         CGPathAddCurveToPoint(_outline, nil, 12.00, 27.00, 28.02, 27.00, 40, 27);
-        
+
         CGPathAddCurveToPoint(_outline, nil, 55.92, 27.00, 50.47,  2.00, 27,  2);
         CGPathAddCurveToPoint(_outline, nil, 13.16,  2.00,  2.00, 13.16,  2, 27);
-        
         CGPathAddCurveToPoint(_outline, nil,  2.00, 40.84, 13.16, 52.00, 27, 52);
         CGPathAddCurveToPoint(_outline, nil, 40.84, 52.00, 52.00, 40.84, 52, 27);
-        
         CGPathAddCurveToPoint(_outline, nil, 52.00, 13.16, 42.39,  2.00, 27,  2);
         CGPathAddCurveToPoint(_outline, nil, 13.16,  2.00,  2.00, 13.16,  2, 27);
         
@@ -119,6 +118,7 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
     _showMenu = showMenu;
     
     CABasicAnimation *strokeStartAnimation = [CABasicAnimation animationWithKeyPath:@"strokeStart"];
+    NSLog(@"keyPath = %@",strokeStartAnimation);
     CABasicAnimation *strokeEndAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     
     //为中间那根条进行的动画,分别对start和end两端的端点进行动画,也就是为start和end两个端点描述其运行的路径，然后分别让其运动
@@ -126,16 +126,14 @@ static const CGFloat hamburgerStrokeEnd = 0.111;
         
         //第一个动画，中间横线到上下两线的交点
         strokeStartAnimation.toValue = [NSNumber numberWithFloat:menuStrokeStart];
-        strokeStartAnimation.duration = 5;
-        //(0,0) ~ (0.25,0.4) ~ (0.5,1) ~ (1,1)
-//        strokeStartAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :0.4 :0.5 :1];
-        strokeStartAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0 :0 :0 : 0];
+        strokeStartAnimation.duration = .5;
+        //(0,0) ~ (0.25,0.4) ~ (0.5,1) ~ (1,1)三阶贝塞尔曲线
+        strokeStartAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :0.4 :0.5 :1];
         
         strokeEndAnimation.toValue = [NSNumber numberWithFloat:menuStrokeEnd];
-        strokeEndAnimation.duration = 6;
-        //(0,0) ~ (0.25,-0.4) ~ (0.5,1) ~ (1,1)
-//        strokeEndAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :-0.4 :0.5 :1];
-        strokeEndAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0 :0 :0 :0];
+        strokeEndAnimation.duration = .6;
+        //(0,0) ~ (0.25,-0.4) ~ (0.5,1) ~ (1,1)三阶贝塞尔曲线
+        strokeEndAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.25 :-0.4 :0.5 :1];
     }else{
         strokeStartAnimation.toValue = [NSNumber numberWithFloat:hamburgerStrokeStart];
         strokeStartAnimation.duration = .5;
